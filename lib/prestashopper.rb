@@ -1,3 +1,5 @@
+# @author Alfredo Amatriain
+
 require "prestashopper/version"
 
 module Prestashopper
