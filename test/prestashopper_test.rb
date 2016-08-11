@@ -6,9 +6,9 @@ class PrestashopperTest < Minitest::Test
     refute_nil ::Prestashopper::VERSION
   end
 
-  def test_checks_valid_key
-    p = Prestashopper::API.new
+  def test_checks_invalid_key
+    url = 'https://my.prestashop.com'
     key = 'invalid_key'
-    assert_equal p.valid_key?(key), false
+    assert_equal Prestashopper.valid_key?(url, key), false
   end
 end
