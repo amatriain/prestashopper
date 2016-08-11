@@ -1,3 +1,5 @@
+require 'uri'
+
 module Prestashopper
 
   # Handle URIs, converting from base Prestashop URL to API URIs
