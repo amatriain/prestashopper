@@ -15,4 +15,11 @@ class UriHandlerTest < Minitest::Test
     api_uri = Prestashopper::UriHandler.api_uri base_uri
     assert_equal api_uri, expected_uri
   end
+
+  def test_get_api_uri_without_scheme
+    base_uri = 'my.prestashop.com'
+    expected_uri = URI.parse 'http://my.prestashop.com/api/'
+    api_uri = Prestashopper::UriHandler.api_uri base_uri
+    assert_equal api_uri, expected_uri
+  end
 end
