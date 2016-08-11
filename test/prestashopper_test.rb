@@ -3,8 +3,9 @@ require 'test_helper'
 class PrestashopperTest < Minitest::Test
 
   def setup
-    @web_stub = stub_request(:any, %r{my.prestashop.com.*})
     @url = 'http://my.prestashop.com'
+    @url_regex = %r{my[.]prestashop[.]com.*}
+    @web_stub = stub_request(:any, @url_regex)
   end
 
   def test_that_it_has_a_version_number
@@ -13,12 +14,18 @@ class PrestashopperTest < Minitest::Test
 
   def test_checks_api_enabled
     remove_request_stub @web_stub
-    web_stub = stub_request(:any, %r{my.prestashop.com.*}).to_return status: 503
+    web_stub = stub_request(:any, @url_regex).to_return status: 503
     assert_equal Prestashopper.api_enabled?(@url), false
 
     remove_request_stub web_stub
-    web_stub = stub_request(:any, %r{my.prestashop.com.*}).to_return status: 401
+    web_stub = stub_request(:any, @url_regex).to_return status: 401
     assert_equal Prestashopper.api_enabled?(@url), true
+  end
+
+  def test_raises_error_checking_api_enabled
+    remove_request_stub @web_stub
+    web_stub = stub_request(:any, @url_regex).to_return status: 200
+    assert_raises(StandardError) {Prestashopper.api_enabled? @url}
   end
 
   def test_checks_invalid_key
