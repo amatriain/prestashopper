@@ -1,4 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/prestashopper.svg)](https://badge.fury.io/rb/prestashopper)
+[![Build Status](https://semaphoreci.com/api/v1/amatriain/prestashopper/branches/master/badge.svg)](https://semaphoreci.com/amatriain/prestashopper)
 
 # Prestashopper
 
