@@ -1,8 +1,8 @@
 # Prestashopper
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/prestashopper`. To experiment with that code, run `bin/console` for an interactive prompt.
+Prestashopper is a ruby gem to interact with a Prestashop API. It has been tested with Prestashop v1.6.1.2
 
-TODO: Delete this and the text above, and describe your gem
+Prestashop is an open source e-commerce application written in PHP: [visit the homepage](https://www.prestashop.com/).
 
 ## Installation
 
@@ -19,20 +19,38 @@ And then execute:
 Or install it yourself as:
 
     $ gem install prestashopper
+    
+## Enabling the Prestashop API and creating an API key
+
+For security reasons the Prestashop API is disabled by default. To be able to use this gem you will have to enable it.
+
+Once enabled you'll have to create an API key and give it the necessary permissions for the operations you intend to perform. Most methods in this gem need a valid API key.
+
+For more information about enabling the Prestashop API and managing API keys and their permissions, see the [official documentation](http://doc.prestashop.com/display/PS16/Using+the+PrestaShop+Web+Service).
 
 ## Usage
 
-TODO: Write usage instructions here
+### Checking if the Prestashop API is enabled
+```
+Prestashopper.api_enabled? 'my.prestashop.com'
+=> true
+```
+
+### Checking if an API key is valid
+```
+Prestashopper.valid_key? 'my.prestashop.com', 'VALID_KEY'
+=> true
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment. The documentation can be generated from the yard comments running `yard doc`.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/prestashopper.
+Bug reports and pull requests are welcome on GitHub at [https://github.com/amatriain/prestashopper](https://github.com/amatriain/prestashopper).
 
 
 ## License
