@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/prestashopper.svg)](https://badge.fury.io/rb/prestashopper)
+
 # Prestashopper
 
 Prestashopper is a ruby gem to interact with a Prestashop API. It has been tested with Prestashop v1.6.1.2
