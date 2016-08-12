@@ -1,5 +1,6 @@
 require 'prestashopper/version'
 require 'rest-client'
+require 'nokogiri'
 require 'prestashopper/api'
 require 'prestashopper/uri_handler'
 
