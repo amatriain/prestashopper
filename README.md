@@ -46,6 +46,17 @@ Prestashopper.valid_key? 'my.prestashop.com', 'VALID_KEY'
 => true
 ```
 
+### Getting an API instance
+```
+api = Prestashopper::API.new 'my.prestashop.com', 'VALID_KEY'
+```
+
+### Listing resources that can be accessed from an API instance
+```
+api.resources
+ => [:customers, :orders, :products] 
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment. The documentation can be generated from the yard comments running `yard doc`.
