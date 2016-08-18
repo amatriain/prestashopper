@@ -16,18 +16,36 @@ module Prestashopper
     def initialize(url, key)
       @api_uri = UriHandler.api_uri url
       @key = key
+      @resources_res = RestClient::Resource.new @api_uri, user: @key, password: ''
     end
 
     # List resources that the API key can access
     # @return [Array<Symbol>] list of resources the API can access
     def resources
-      @resources_res ||= RestClient::Resource.new @api_uri, user: @key, password: ''
       xml = @resources_res.get.body
       xml_doc = Nokogiri::XML xml
-      nodes = xml_doc.xpath('/prestashop/api/*')
+      nodes = xml_doc.xpath '/prestashop/api/*'
       resources_list = []
       nodes.each{|n| resources_list << n.name.to_sym}
       return resources_list
+    end
+
+    def get_products
+      # /api/products returns XML with the IDs of each individual product
+      xml_products = @resources_res['products'].get.body
+      xml_products_doc = Nokogiri::XML xml_products
+      products_nodes = xml_products_doc.xpath '/prestashop/products/*/@id'
+      ids_list = []
+      products_nodes.each{|n| ids_list << n.value}
+
+      # GET each individual product to get the whole data
+      ids_list.each do |id|
+        xml_product = @resources_res["products/#{id}"].get.body
+        xml_product_doc = Nokogiri::XML xml_product_doc
+        # TODO return actual products array
+      end
+
+      return ids_list
     end
   end
 end
