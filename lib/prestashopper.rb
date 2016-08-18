@@ -2,6 +2,7 @@ require 'prestashopper/version'
 require 'rest-client'
 require 'nokogiri'
 require 'prestashopper/api'
+require 'prestashopper/product'
 require 'prestashopper/uri_handler'
 
 # @author Alfredo Amatriain <geralt@gmail.com>

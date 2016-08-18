@@ -39,13 +39,14 @@ module Prestashopper
       products_nodes.each{|n| ids_list << n.value}
 
       # GET each individual product to get the whole data
+      products = []
       ids_list.each do |id|
         xml_product = @resources_res["products/#{id}"].get.body
-        xml_product_doc = Nokogiri::XML xml_product_doc
-        # TODO return actual products array
+        product = Product.xml2hash xml_product
+        products << product
       end
 
-      return ids_list
+      return products
     end
   end
 end

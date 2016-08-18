@@ -29,6 +29,7 @@ class ApiTest < Minitest::Test
 
     products = Prestashopper::API.new(@url, @key).get_products
     assert_equal 2, products.length
-    # TODO rest of assertions
+    product_ids = products.map{|p| p['id']}
+    ['1','2'].each {|id| assert_includes product_ids, id}
   end
 end
