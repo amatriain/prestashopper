@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prestashop xmlns:xlink="http://www.w3.org/1999/xlink">
+  <api shopName="MyPrestashop">
+    <customers xlink:href="http://my.prestashop.com/api/customers" get="true" put="false" post="false" delete="false" head="true">
+      <description xlink:href="http://my.prestashop.com/api/customers" get="true" put="false" post="false" delete="false" head="true">The e-shop's customers</description>
+      <schema xlink:href="http://my.prestashop.com/api/customers?schema=blank" type="blank"/>
+      <schema xlink:href="http://my.prestashop.com/api/customers?schema=synopsis" type="synopsis"/>
+    </customers>
+    <orders xlink:href="http://my.prestashop.com/api/orders" get="true" put="false" post="false" delete="false" head="true">
+      <description xlink:href="http://my.prestashop.com/api/orders" get="true" put="false" post="false" delete="false" head="true">The Customers orders</description>
+      <schema xlink:href="http://my.prestashop.com/api/orders?schema=blank" type="blank"/>
+      <schema xlink:href="http://my.prestashop.com/api/orders?schema=synopsis" type="synopsis"/>
+    </orders>
+    <products xlink:href="http://my.prestashop.com/api/products" get="true" put="false" post="false" delete="false" head="true">
+      <description xlink:href="http://my.prestashop.com/api/products" get="true" put="false" post="false" delete="false" head="true">The products</description>
+      <schema xlink:href="http://my.prestashop.com/api/products?schema=blank" type="blank"/>
+      <schema xlink:href="http://my.prestashop.com/api/products?schema=synopsis" type="synopsis"/>
+    </products>
+  </api>
+</prestashop>
