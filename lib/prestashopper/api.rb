@@ -30,6 +30,8 @@ module Prestashopper
       return resources_list
     end
 
+    # Get all products data
+    # @return [Array<Hash>] list of products. Each product is represented by a hash with all its attributes.
     def get_products
       # /api/products returns XML with the IDs of each individual product
       xml_products = @resources_res['products'].get.body

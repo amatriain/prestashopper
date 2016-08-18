@@ -5,6 +5,9 @@ module Prestashopper
   # Has methods to convert the XML returned from the API to a ruby hash
   class Product
 
+    # Convert a product XML returned by the Prestashop API to a ruby hash, more manageable
+    # @param xml [String] XML returned by the Prestashop API
+    # @return [Hash] the product converted to a hash representation
     def self.xml2hash(xml)
       xml_doc = Nokogiri::XML( xml).remove_namespaces!
       # Strip surrounding tag
