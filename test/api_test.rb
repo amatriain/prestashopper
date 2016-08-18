@@ -33,7 +33,7 @@ class ApiTest < Minitest::Test
     stub_request(:any, @url_regex).to_return body: xml
 
     resources = Prestashopper::API.new(@url, @key).resources
-    assert_equal resources.length, 3
+    assert_equal 3, resources.length
     [:customers, :orders, :products].each {|s| assert_includes resources, s}
   end
 end
