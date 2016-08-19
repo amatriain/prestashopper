@@ -57,6 +57,15 @@ api.resources
  => [:customers, :orders, :products] 
 ```
 
+### Gettting products
+```
+products = api.get_products
+products[0].description
+=>  "product 1"
+products[0].price
+=> "24.71"
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment. The documentation can be generated from the yard comments running `yard doc`.
