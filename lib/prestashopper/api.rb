@@ -26,7 +26,7 @@ module Prestashopper
     end
 
     def method_missing(method, *args, &block)
-      if method.to_s.starts_with?('get_')
+      if method.to_s.match(/^get_/)
         resource = method.to_s.sub(/^get_/,'').pluralize.to_sym
         raise 'You do not have access to this resource' unless resources.include?(resource)
         if args.any?
