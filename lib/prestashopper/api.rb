@@ -33,7 +33,11 @@ module Prestashopper
           ids = args.first.is_a?(Array) ? args.first : args
           objects = ids.collect do |resource_id|
             Hash.from_xml(Nokogiri::XML(@resources_res[resource][resource_id].get.body).remove_namespaces!.xpath("/prestashop/#{resource.to_s.singularize}").to_s).values
-          end.flatten.collect { |resource_hash| JSON.parse(resource_hash.to_json, object_class: OpenStruct) }
+          end.flatten.collect do |resource_hash|
+            resource_class_name = resource.to_s.classify
+            resource_class = "Prestashopper::#{resource_class_name}".safe_constantize || Prestashopper.const_set(resource_class_name, Class.new(OpenStruct))
+            JSON.parse(resource_hash.to_json, object_class: resource_class)
+          end
         else
           objects = Nokogiri::XML(@resources_res[resource].get.body).xpath("/prestashop/#{resource}/*/@id").collect(&:value)
         end
