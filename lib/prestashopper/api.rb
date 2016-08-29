@@ -30,27 +30,6 @@ module Prestashopper
       return resources_list
     end
 
-    # Get all products data
-    # @return [Array<Hash>] list of products. Each product is represented by a hash with all its attributes.
-    def get_products
-      # /api/products returns XML with the IDs of each individual product
-      xml_products = @resources_res['products'].get.body
-      xml_products_doc = Nokogiri::XML xml_products
-      products_nodes = xml_products_doc.xpath '/prestashop/products/*/@id'
-      ids_list = []
-      products_nodes.each{|n| ids_list << n.value}
-
-      # GET each individual product to get the whole data
-      products = []
-      ids_list.each do |id|
-        xml_product = @resources_res["products/#{id}"].get.body
-        product = Product.xml2hash xml_product
-        products << product
-      end
-
-      return products
-    end
-
     def method_missing(method, *args, &block)
       if method.to_s.starts_with?('get_')
         resource = method.to_s.sub(/^get_/,'').pluralize.to_sym
