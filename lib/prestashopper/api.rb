@@ -22,12 +22,7 @@ module Prestashopper
     # List resources that the API key can access
     # @return [Array<Symbol>] list of resources the API can access
     def resources
-      xml = @resources_res.get.body
-      xml_doc = Nokogiri::XML xml
-      nodes = xml_doc.xpath '/prestashop/api/*'
-      resources_list = []
-      nodes.each{|n| resources_list << n.name.to_sym}
-      return resources_list
+      @resources ||= Nokogiri::XML(@resources_res.get.body).xpath('/prestashop/api/*').collect { |resource| resource.name.to_sym }
     end
 
     def method_missing(method, *args, &block)
