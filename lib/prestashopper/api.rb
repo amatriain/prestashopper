@@ -28,22 +28,59 @@ module Prestashopper
     def method_missing(method, *args, &block)
       if method.to_s.match(/^get_/)
         resource = method.to_s.sub(/^get_/,'').pluralize.to_sym
-        raise 'You do not have access to this resource' unless resources.include?(resource)
-        if args.any?
-          ids = args.first.is_a?(Array) ? args.first : args
-          objects = ids.collect do |resource_id|
-            Hash.from_xml(Nokogiri::XML(@resources_res[resource][resource_id].get.body).remove_namespaces!.xpath("/prestashop/#{resource.to_s.singularize}").to_s).values
-          end.flatten.collect do |resource_hash|
-            resource_class_name = resource.to_s.classify
-            resource_class = "Prestashopper::#{resource_class_name}".safe_constantize || Prestashopper.const_set(resource_class_name, Class.new(OpenStruct))
-            JSON.parse(resource_hash.to_json, object_class: resource_class)
-          end
+        raise RestClient::MethodNotAllowed, 'You do not have access to this resource' unless resources.include?(resource)
+        
+        if method.to_s == method.to_s.singularize
+          get_resource(resource, collect_ids_for_resource(args), true)
         else
-          objects = Nokogiri::XML(@resources_res[resource].get.body).xpath("/prestashop/#{resource}/*/@id").collect(&:value)
+          ids = collect_ids_for_resources(args)
+          ids.present? ? get_resources(resource, ids) : get_resource_ids(resource)
         end
       else
         super
       end
+    end
+
+    private
+
+    def get_resource_ids(resource)
+      Nokogiri::XML(@resources_res[resource].get.body).xpath("/prestashop/#{resource}/*/@id").collect(&:value)
+    end
+
+    def get_resource(resource, id, raise_not_found_exception = false)
+      resource_class_name = resource.to_s.classify
+      resource_class = "Prestashopper::#{resource_class_name}".safe_constantize || Prestashopper.const_set(resource_class_name, Class.new(OpenStruct))
+
+      begin
+        response = Nokogiri::XML(@resources_res[resource][id].get.body).remove_namespaces!.xpath("/prestashop/#{resource.to_s.singularize}")
+        JSON.parse(Hash.from_xml(response.to_s).values.first.to_json, object_class: resource_class)
+      rescue RestClient::NotFound
+        raise if raise_not_found_exception
+        nil
+      end
+    end
+
+    def get_resources(resource, ids)
+      ids.uniq.sort.collect { |id| get_resource(resource, id) }.compact
+    end
+
+    def collect_ids_for_resource(args)
+      raise ArgumentError, "wrong number of arguments (#{args.length} for 1)" unless args.one?
+      id = args.first
+      validate_resource_id_type(id)
+      id
+    end
+
+    def collect_ids_for_resources(args)
+      return nil if args.none?
+      raise TypeError, 'Arguments must be a list of resource ids' unless args.is_a?(Array)
+      args.each { |id| validate_resource_id_type(id) }
+      args
+    end
+
+    def validate_resource_id_type(id)
+      raise TypeError, 'Argument must be a valid resource id type' unless id.is_a?(Numeric) || id.is_a?(String)
+      id
     end
   end
 end
