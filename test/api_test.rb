@@ -6,18 +6,12 @@ class ApiTest < Minitest::Test
     @url = 'http://my.prestashop.com'
     @url_regex = %r{my[.]prestashop[.]com.*}
     @key = 'VALID_KEY'
-  end
+    @resources = [:customers, :orders, :products]
+    @product_ids = ['1', '2']
 
-  def test_get_resources
     xml = File.open(File.join __dir__, 'xml', 'resources.xml').read
     stub_request(:any, @url_regex).to_return body: xml
 
-    resources = Prestashopper::API.new(@url, @key).resources
-    assert_equal 3, resources.length
-    [:customers, :orders, :products].each {|s| assert_includes resources, s}
-  end
-
-  def test_get_products
     xml_products = File.open(File.join __dir__, 'xml', 'products.xml').read
     stub_request(:any, %r{my[.]prestashop[.]com/api/products}).to_return body: xml_products
 
@@ -26,10 +20,32 @@ class ApiTest < Minitest::Test
 
     xml_product_2 = File.open(File.join __dir__, 'xml', 'product_2.xml').read
     stub_request(:any, %r{my[.]prestashop[.]com/api/products/2}).to_return body: xml_product_2
+  end
 
-    products = Prestashopper::API.new(@url, @key).get_products
-    assert_equal 2, products.length
-    product_ids = products.map{|p| p['id']}
-    ['1','2'].each {|id| assert_includes product_ids, id}
+  def test_get_resources
+    resources = Prestashopper::API.new(@url, @key).resources
+    assert_equal @resources.length, resources.length
+    @resources.each { |resource| assert_includes resources, resource }
+  end
+
+  def test_get_products
+    products_ids = Prestashopper::API.new(@url, @key).get_products
+    assert_equal @product_ids.length, products_ids.length
+    @product_ids.each { |id| assert_includes products_ids, id }
+  end
+
+  def test_get_products_for_ids
+    products = Prestashopper::API.new(@url, @key).get_products(*@product_ids)
+    assert_equal @product_ids.length, products.length
+    products_ids = products.collect(&:id)
+    @product_ids.each { |id| assert_includes products_ids, id }
+    products.each { |product| assert_kind_of Prestashopper::Product, product }
+  end
+
+  def test_get_product_for_id
+    product_id = @product_ids.first
+    product = Prestashopper::API.new(@url, @key).get_product(product_id)
+    assert_kind_of Prestashopper::Product, product
+    assert_equal product.id, product_id
   end
 end
